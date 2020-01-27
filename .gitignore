@@ -1,4 +1,6 @@
-# Frontend
+############
+# Frontend #
+############
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Node template
@@ -91,9 +93,9 @@ sw.*
 # Vim swap files
 *.swp
 
-#####################################################################
-
-# Backend
+###########
+# Backend #
+###########
 
 # Created by https://www.gitignore.io/api/osx,linux,python,windows,pycharm,visualstudiocode
 

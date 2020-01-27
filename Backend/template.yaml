@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  trad-sessions
+
+  TradSessions Event Service Template
+
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  EventServiceFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: event-service/
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      Policies: AmazonDynamoDBFullAccess
+      Events:
+        EventService:
+          Type: Api
+          Properties:
+            Path: /events
+            Method: any
+  
+  InfoTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: InfoTable
+  
+  RankingTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: RankingTable
+      PrimaryKey:
+        Name: rank
+        Type: Number
+
+Outputs:
+  EventServiceApi:
+    Description: "API Gateway endpoint URL for Prod stage for TradSessions Event Service"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+  EventServiceFunction:
+    Description: "TradSessions Event Service Function ARN"
+    Value: !GetAtt EventServiceFunction.Arn
+  ServiceFunctionIamRole:
+    Description: "Implicit IAM Role created for TradSessions Event Service function"
+    Value: !GetAtt EventServiceFunctionRole.Arn

@@ -1,0 +1,10 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "trad-sessions"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1erbhxwkwwi2a"
+s3_prefix = "trad-sessions"
+region = "eu-west-1"
+capabilities = "CAPABILITY_IAM"
+
