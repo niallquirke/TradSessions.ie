@@ -6,7 +6,6 @@
       v-on="listeners"
       @input="updateValue"
       v-bind="$attrs"
-      style="border-radius: 10px"
     />
   </div>
 </template>

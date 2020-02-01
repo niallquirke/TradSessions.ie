@@ -219,21 +219,4 @@ export default {
 .field {
   margin-bottom: 24px;
 }
-.example_b {
-  color: #fff !important;
-  text-decoration: none;
-  background: #39b982;
-  padding: 15px;
-  border-radius: 20px;
-  display: inline-block;
-  border: none;
-  transition: all 0.4s ease 0s;
-  margin-top: 5px;
-}
-.example_b:hover {
-  -webkit-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
-  -moz-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
-  box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
-  transition: all 0.4s ease 0s;
-}
 </style>

@@ -4,10 +4,8 @@
       TradSessions.ie
     </nuxt-link>
     <nav>
-      <nuxt-link to="/"> List </nuxt-link> |
-      <nuxt-link to="/event/create">
-        Create
-      </nuxt-link>
+      <nuxt-link to="/event/create">Create</nuxt-link> |
+      <nuxt-link to="/login"> Login </nuxt-link>
     </nav>
   </div>
 </template>
