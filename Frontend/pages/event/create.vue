@@ -90,10 +90,6 @@
           >Create</BaseButton
         >
       </div>
-
-      <p v-if="$v.$anyError" class="errorMessage">
-        Please fill out the required field(s).
-      </p>
     </form>
   </div>
 </template>
@@ -103,18 +99,7 @@ import { mapState } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 
 export default {
-  head() {
-    return {
-      title: 'Create a Session - TradSessions.ie',
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'Create a traditional Irish music session'
-        }
-      ]
-    }
-  },
+  middleware: 'auth',
   data() {
     return {
       event: this.createFreshEventObject(),

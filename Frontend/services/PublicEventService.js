@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-  baseURL: 'https://8o3brduybf.execute-api.eu-west-1.amazonaws.com/Prod/',
+  baseURL: 'https://0rdjsjwb3c.execute-api.eu-west-1.amazonaws.com/Prod/',
   withCredentials: false,
   headers: {
     Accept: 'application/json',

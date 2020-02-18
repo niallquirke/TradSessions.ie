@@ -1,17 +1,28 @@
 <template>
   <div class="nav">
-    <nuxt-link to="/" class="brand">
-      TradSessions.ie
-    </nuxt-link>
+    <nuxt-link to="/" class="brand" @click.native="setDirectedFromCreate(false)"
+      >TradSessions.ie</nuxt-link
+    >
     <nav>
-      <nuxt-link to="/event/create">Create</nuxt-link> |
-      <nuxt-link to="/login"> Login </nuxt-link>
+      <n-link to="/event/create" @click.native="setDirectedFromCreate(true)"
+        >Create</n-link
+      >
+      |
+      <n-link to="/profile" @click.native="setDirectedFromCreate(false)"
+        >Profile</n-link
+      >
     </nav>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  methods: {
+    setDirectedFromCreate(directed) {
+      this.$store.dispatch('user/setDirectedFromCreate', directed)
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -27,6 +38,7 @@ export default {}
   justify-content: space-between;
   align-items: center;
   height: 60px;
+  font-size: 1.2em;
 }
 .nav .nav-item {
   box-sizing: border-box;

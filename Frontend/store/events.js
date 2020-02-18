@@ -1,4 +1,4 @@
-import EventService from '@/services/EventService.js'
+import PublicEventService from '~/services/PublicEventService.js'
 
 export const state = () => ({
   events: [],
@@ -16,17 +16,17 @@ export const mutations = {
 
 export const actions = {
   fetchEvents({ commit }, page) {
-    return EventService.getEvents(page).then((response) => {
+    return PublicEventService.getEvents(page).then((response) => {
       commit('SET_EVENTS', response.data)
     })
   },
   fetchEvent({ commit }, id) {
-    return EventService.getEvent(id).then(function(response) {
+    return PublicEventService.getEvent(id).then((response) => {
       commit('SET_EVENT', response.data)
     })
   },
   createEvent({ commit }, event) {
-    return EventService.createEvent(event).then(() => {
+    return PublicEventService.createEvent(event).then(() => {
       commit('SET_EVENT', event)
     })
   }

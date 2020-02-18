@@ -7,19 +7,15 @@
       :event="event"
       :data-index="index"
     />
-    <template v-if="page != 1">
-      <nuxt-link :to="{ path: '/', query: { page: page - 1 } }"
-        >Prev Page</nuxt-link
-      >
-    </template>
-    <template v-if="page != 1 && !events.last_page">
-      |
-    </template>
-    <template v-if="!events.last_page">
-      <nuxt-link :to="{ path: '/', query: { page: page + 1 } }"
-        >Next Page</nuxt-link
-      >
-    </template>
+    <nuxt-link v-show="page != 1" :to="{ path: '/', query: { page: page - 1 } }"
+      >Prev Page</nuxt-link
+    >
+    <template v-if="page != 1 && !events.last_page">|</template>
+    <nuxt-link
+      v-show="!events.last_page"
+      :to="{ path: '/', query: { page: page + 1 } }"
+      >Next Page</nuxt-link
+    >
   </div>
 </template>
 
@@ -85,5 +81,3 @@ export default {
   }
 }
 </script>
-
-<style></style>

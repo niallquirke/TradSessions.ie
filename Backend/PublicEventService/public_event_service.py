@@ -1,20 +1,20 @@
 import json
 import boto3
 
+INFO_TABLE = 'tradsesh-0.1'
+RANKING_TABLE = 'tradsesh-ranking-0.1'
+EVENTS_PER_PAGE = 5
 
 client = boto3.client('dynamodb')
 resource = boto3.resource('dynamodb')
-info_table = 'tradsesh-0.1'
-ranking_table = 'tradsesh-ranking-0.1'
-events_per_page = 5
 
 
 def get_page(page):
     page = int(page)
     event_list = []
     last_page_flag = False
-    i = ((page - 1) * events_per_page)
-    while (i < page * events_per_page):
+    i = ((page - 1) * EVENTS_PER_PAGE)
+    while (i < page * EVENTS_PER_PAGE):
         id_response = get_event_id(i)
         if id_response['status'] == 200:
             event_response = get_event(id_response['body'])
@@ -23,14 +23,15 @@ def get_page(page):
             else:
                 return event_response
         i += 1
-    if get_event_id(page * events_per_page)['status'] != 200:
+    if get_event_id(page * EVENTS_PER_PAGE)['status'] != 200:
         last_page_flag = True
     return {'status': 200, 'body': {"events": event_list, "last_page": last_page_flag}}
 
 
 def get_event_id(rank):
     try:
-        dynamo = client.get_item(TableName=ranking_table, Key={'rank': {'N': str(rank)}})
+        dynamo = client.get_item(TableName=RANKING_TABLE, Key={
+                                 'rank': {'N': str(rank)}})
         return {'status': 200, 'body': unmarshal_dynamodb_json(dynamo['Item'])['id']}
     except:  # noqa E722
         err = 'No event found for rank ' + str(rank)
@@ -40,7 +41,8 @@ def get_event_id(rank):
 
 def get_event(event_id):
     try:
-        dynamo = client.get_item(TableName=info_table, Key={'id': {'S': event_id}})
+        dynamo = client.get_item(TableName=INFO_TABLE, Key={
+                                 'id': {'S': event_id}})
         return {'status': 200, 'body': unmarshal_dynamodb_json(dynamo['Item'])}
     except:  # noqa E722
         err = 'Event ID "' + event_id + '" not found from ranking'
@@ -89,10 +91,12 @@ def _unmarshal_value(node):
 def createEvent(event):
     try:
         event = json.loads(event)
-        number_of_events = len(client.scan(TableName=ranking_table)['Items'])
+        number_of_events = len(client.scan(TableName=RANKING_TABLE)['Items'])
         event["rank"] = str(number_of_events)
-        client.put_item(TableName=ranking_table, Item=json_to_dynamo_rank(event))
-        client.put_item(TableName=info_table, Item=json_to_dynamo_create(event))
+        client.put_item(TableName=RANKING_TABLE,
+                        Item=json_to_dynamo_rank(event))
+        client.put_item(TableName=INFO_TABLE,
+                        Item=json_to_dynamo_create(event))
         return {'status': 200, 'body': {"Success": "Successfully created event"}}
     except:  # noqa E722
         return {'status': 400, 'body': {'Error': "Failed to create event"}}
@@ -125,7 +129,7 @@ def json_to_dynamo_create(event):
     }
 
 
-def lambda_handler(event, context):
+def public_event_handler(event, context):
     print('Request', event)
     response = {'status': 400, 'body': {'Error': 'Invalid http method'}}
 
@@ -136,9 +140,11 @@ def lambda_handler(event, context):
             elif 'id' in event["queryStringParameters"]:
                 response = get_event(event["queryStringParameters"]['id'])
             else:
-                response = {'status': 400, 'body': {'Error': 'Invalid parameter'}}
+                response = {'status': 400, 'body': {
+                    'Error': 'Invalid parameter'}}
         else:
-            response = {'status': 400, 'body': {'Error': 'No query string found'}}
+            response = {'status': 400, 'body': {
+                'Error': 'No query string found'}}
 
     elif event['httpMethod'] == 'POST':
         response = createEvent(event['body'])

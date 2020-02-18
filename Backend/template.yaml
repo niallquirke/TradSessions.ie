@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
   trad-sessions
@@ -10,25 +10,20 @@ Globals:
     Timeout: 3
 
 Resources:
-  EventServiceFunction:
+  PublicEventService:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: event-service/
-      Handler: app.lambda_handler
+      CodeUri: PublicEventService/
+      Handler: public_event_service.public_event_handler
       Runtime: python3.7
       Policies: AmazonDynamoDBFullAccess
       Events:
-        EventService:
+        PublicEventServiceApi:
           Type: Api
           Properties:
             Path: /events
             Method: any
-  
-  InfoTable:
-    Type: AWS::Serverless::SimpleTable
-    Properties:
-      TableName: InfoTable
-  
+
   RankingTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
@@ -37,13 +32,98 @@ Resources:
         Name: rank
         Type: Number
 
+  InfoTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: InfoTable
+
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 7
+      UsernameAttributes:
+        - email
+      Schema:
+        - AttributeDataType: String
+          Name: email
+          Required: true
+        - AttributeDataType: String
+          Name: preferred_username
+          Required: true
+      AutoVerifiedAttributes:
+        - email
+      EmailConfiguration:
+        EmailSendingAccount: COGNITO_DEFAULT
+      VerificationMessageTemplate:
+        DefaultEmailOption: CONFIRM_WITH_LINK
+        EmailSubjectByLink: "Your TradSessions.ie Verification Link"
+        EmailMessageByLink: "Please click the following link to verify your email: {##Verify Email##}"
+
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      GenerateSecret: false
+
+  UserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: tradsessions
+      UserPoolId: !Ref UserPool
+
+  PrivateEventServiceApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: PrivateEventServiceApi
+      StageName: Prod
+      Auth:
+        DefaultAuthorizer: CognitoAuthorizer
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn: !GetAtt UserPool.Arn
+        AddDefaultAuthorizerToCorsPreflight: False
+      Cors:
+        AllowOrigin: "'http://tradsessions.ie'"
+        AllowHeaders: "'*'"
+        AllowMethods: "'*'"
+        AllowCredentials: True
+      GatewayResponses:
+        DEFAULT_4XX:
+          ResponseParameters:
+            Headers:
+              Access-Control-Allow-Origin: "'*'"
+
+  PrivateEventService:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: PrivateEventService/
+      Handler: private_event_service.private_event_handler
+      Runtime: python3.7
+      Policies: AmazonDynamoDBFullAccess
+      Events:
+        PrivateEventServiceApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PrivateEventServiceApi
+            Path: /events
+            Method: any
+
 Outputs:
-  EventServiceApi:
-    Description: "API Gateway endpoint URL for Prod stage for TradSessions Event Service"
+  PublicEventServiceApi:
+    Description: "Endpoint"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
-  EventServiceFunction:
-    Description: "TradSessions Event Service Function ARN"
-    Value: !GetAtt EventServiceFunction.Arn
-  ServiceFunctionIamRole:
-    Description: "Implicit IAM Role created for TradSessions Event Service function"
-    Value: !GetAtt EventServiceFunctionRole.Arn
+  UserPool:
+    Description: "ID"
+    Value: !Ref UserPool
+    Export:
+      Name: "UserPool::Id"
+  UserPoolClient:
+    Description: "ID"
+    Value: !Ref UserPoolClient
+    Export:
+      Name: "UserPoolClient::Id"
+  PrivateEventServiceApi:
+    Description: "Endpoint"
+    Value: !Sub "https://${PrivateEventServiceApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"

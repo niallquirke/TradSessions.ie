@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
+    "amazon-cognito-identity-js": "^3.2.2",
+    "aws-sdk": "^2.613.0",
     "nuxt": "^2.0.0",
     "vuelidate": "^0.7.5"
   },
@@ -21,8 +23,9 @@
     "@nuxtjs/eslint-module": "^1.0.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^6.1.0",
-    "eslint-plugin-nuxt": ">=0.4.2",
     "eslint-config-prettier": "^4.1.0",
+    "eslint-loader": "^3.0.3",
+    "eslint-plugin-nuxt": ">=0.4.2",
     "eslint-plugin-prettier": "^3.0.1",
     "prettier": "^1.16.4"
   }
