@@ -10,11 +10,11 @@
         placeholder="Monday's at Murphy's"
         type="text"
       />
-      <template v-if="$v.event.title.$error">
+      <div v-if="$v.event.title.$error">
         <p v-if="!$v.event.title.required" class="errorMessage">
           Title is required.
         </p>
-      </template>
+      </div>
 
       <h3>Where</h3>
       <BaseInput
@@ -24,11 +24,11 @@
         placeholder="Murphy's"
         type="text"
       />
-      <template v-if="$v.event.location.$error">
+      <div v-if="$v.event.location.$error">
         <p v-if="!$v.event.location.required" class="errorMessage">
           Location is required.
         </p>
-      </template>
+      </div>
       <BaseSelect
         :options="counties"
         v-model="event.county"
@@ -36,11 +36,11 @@
         @blur="$v.event.county.$touch()"
         label="County"
       />
-      <template v-if="$v.event.county.$error">
+      <div v-if="$v.event.county.$error">
         <p v-if="!$v.event.county.required" class="errorMessage">
           County is required.
         </p>
-      </template>
+      </div>
 
       <h3>When</h3>
       <BaseSelect
@@ -50,11 +50,11 @@
         @blur="$v.event.day.$touch()"
         label="Day"
       />
-      <template v-if="$v.event.day.$error">
+      <div v-if="$v.event.day.$error">
         <p v-if="!$v.event.day.required" class="errorMessage">
           Day is required.
         </p>
-      </template>
+      </div>
       <BaseSelect
         :options="times"
         v-model="event.time"
@@ -62,11 +62,11 @@
         @blur="$v.event.time.$touch()"
         label="Time"
       />
-      <template v-if="$v.event.time.$error">
+      <div v-if="$v.event.time.$error">
         <p v-if="!$v.event.time.required" class="errorMessage">
           Time is required.
         </p>
-      </template>
+      </div>
 
       <h3>The Craic</h3>
       <BaseInput
@@ -76,11 +76,11 @@
         placeholder="Lovely Pints"
         type="text"
       />
-      <template v-if="$v.event.description.$error">
+      <div v-if="$v.event.description.$error">
         <p v-if="!$v.event.description.required" class="errorMessage">
           The craic is required.
         </p>
-      </template>
+      </div>
 
       <div class="button_cont" align="center">
         <BaseButton
@@ -165,7 +165,6 @@ export default {
     createFreshEventObject() {
       return {
         id: Math.floor(Math.random() * 10000000).toString(),
-        user: this.$store.state.user.user,
         title: '',
         location: '',
         county: '',
@@ -178,7 +177,7 @@ export default {
     createEvent() {
       this.$v.$touch()
       if (!this.$v.$invalid) {
-        this.$store.dispatch('events/createEvent', this.event).then(() => {
+        this.$store.dispatch('user/createEvent', this.event).then(() => {
           this.$router.push({
             name: 'event',
             query: { id: this.event.id }

@@ -27,9 +27,7 @@ export default {
       type: Array,
       required: true
     },
-    // eslint-disable-next-line vue/require-default-prop
     value: [String, Number],
-    // eslint-disable-next-line vue/require-default-prop
     label: String
   },
   methods: {

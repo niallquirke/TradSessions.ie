@@ -24,10 +24,5 @@ export const actions = {
     return PublicEventService.getEvent(id).then((response) => {
       commit('SET_EVENT', response.data)
     })
-  },
-  createEvent({ commit }, event) {
-    return PublicEventService.createEvent(event).then(() => {
-      commit('SET_EVENT', event)
-    })
   }
 }

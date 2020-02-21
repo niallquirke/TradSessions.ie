@@ -3,7 +3,7 @@ import boto3
 
 INFO_TABLE = 'tradsesh-0.1'
 RANKING_TABLE = 'tradsesh-ranking-0.1'
-EVENTS_PER_PAGE = 5
+EVENTS_PER_PAGE = 8
 
 client = boto3.client('dynamodb')
 resource = boto3.resource('dynamodb')
@@ -45,7 +45,7 @@ def get_event(event_id):
                                  'id': {'S': event_id}})
         return {'status': 200, 'body': unmarshal_dynamodb_json(dynamo['Item'])}
     except:  # noqa E722
-        err = 'Event ID "' + event_id + '" not found from ranking'
+        err = 'Event ID "' + event_id + '" was in the ranking table but not the event table'
         print('Error:', err)
         return {'status': 404, 'body': {'Error': err}}
 
@@ -88,47 +88,6 @@ def _unmarshal_value(node):
             return data
 
 
-def createEvent(event):
-    try:
-        event = json.loads(event)
-        number_of_events = len(client.scan(TableName=RANKING_TABLE)['Items'])
-        event["rank"] = str(number_of_events)
-        client.put_item(TableName=RANKING_TABLE,
-                        Item=json_to_dynamo_rank(event))
-        client.put_item(TableName=INFO_TABLE,
-                        Item=json_to_dynamo_create(event))
-        return {'status': 200, 'body': {"Success": "Successfully created event"}}
-    except:  # noqa E722
-        return {'status': 400, 'body': {'Error': "Failed to create event"}}
-
-
-def json_to_dynamo_rank(event):
-    return {
-        "rank": {"N": event["rank"]},
-        "id": {"S": event["id"]}
-    }
-
-
-def json_to_dynamo_create(event):
-    return {
-        "id": {"S": event["id"]},
-        "user": {
-            "M": {
-                "id": {"S": event["user"]["id"]},
-                "name": {"S": event["user"]["name"]}
-            }
-        },
-        "title": {"S": event["title"]},
-        "description": {"S": event["description"]},
-        "location": {"S": event["location"]},
-        "day": {"S": event["day"]},
-        "time": {"S": event["time"]},
-        "rank": {"N": event["rank"]},
-        "comments": {"L": []},
-        "county": {"S": event["county"]}
-    }
-
-
 def public_event_handler(event, context):
     print('Request', event)
     response = {'status': 400, 'body': {'Error': 'Invalid http method'}}
@@ -145,9 +104,6 @@ def public_event_handler(event, context):
         else:
             response = {'status': 400, 'body': {
                 'Error': 'No query string found'}}
-
-    elif event['httpMethod'] == 'POST':
-        response = createEvent(event['body'])
 
     return {
         'statusCode': response['status'],

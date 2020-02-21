@@ -3,6 +3,7 @@ import PrivateEventService from '@/services/PrivateEventService'
 
 export const state = () => ({
   user: {},
+  events: [],
   idToken: null,
   directedFromCreate: false
 })
@@ -18,7 +19,7 @@ export const mutations = {
     location.reload()
   },
   SET_USER_EVENTS(state, userEvents) {
-    state.user.events = userEvents
+    state.events = userEvents
   },
   SET_DIRECTED_FROM_CREATE(state, directed) {
     state.directedFromCreate = directed
@@ -47,6 +48,10 @@ export const actions = {
   },
   setDirectedFromCreate({ commit }, directed) {
     commit('SET_DIRECTED_FROM_CREATE', directed)
+  },
+  createEvent({ commit, state }, event) {
+    event.user = state.user.preferred_username
+    return PrivateEventService.createEvent(event, state.idToken)
   }
 }
 

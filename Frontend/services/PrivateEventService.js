@@ -10,9 +10,12 @@ const apiClient = axios.create({
 })
 
 export default {
-  getUserEvents(username, page, idToken) {
+  getUserEvents(user, page, idToken) {
     apiClient.defaults.headers.common.Authorization = idToken
-    console.log(username, page)
-    return apiClient.get('/events')
+    return apiClient.get('/events?user=' + user + '&page=' + page)
+  },
+  createEvent(event, idToken) {
+    apiClient.defaults.headers.common.Authorization = idToken
+    return apiClient.post('/events', event)
   }
 }

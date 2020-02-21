@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: "2010-09-09"
+AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
   trad-sessions
@@ -24,6 +24,11 @@ Resources:
             Path: /events
             Method: any
 
+  EventTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: EventTable
+
   RankingTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
@@ -32,10 +37,13 @@ Resources:
         Name: rank
         Type: Number
 
-  InfoTable:
+  UserTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
-      TableName: InfoTable
+      TableName: UserTable
+      PrimaryKey:
+        Name: username
+        Type: String
 
   UserPool:
     Type: AWS::Cognito::UserPool
@@ -58,8 +66,8 @@ Resources:
         EmailSendingAccount: COGNITO_DEFAULT
       VerificationMessageTemplate:
         DefaultEmailOption: CONFIRM_WITH_LINK
-        EmailSubjectByLink: "Your TradSessions.ie Verification Link"
-        EmailMessageByLink: "Please click the following link to verify your email: {##Verify Email##}"
+        EmailSubjectByLink: 'Your TradSessions.ie Verification Link'
+        EmailMessageByLink: 'Please click the following link to verify your email: {##Verify Email##}'
 
   UserPoolClient:
     Type: AWS::Cognito::UserPoolClient
@@ -85,10 +93,9 @@ Resources:
             UserPoolArn: !GetAtt UserPool.Arn
         AddDefaultAuthorizerToCorsPreflight: False
       Cors:
-        AllowOrigin: "'http://tradsessions.ie'"
+        AllowOrigin: "'*'"
         AllowHeaders: "'*'"
         AllowMethods: "'*'"
-        AllowCredentials: True
       GatewayResponses:
         DEFAULT_4XX:
           ResponseParameters:
@@ -112,18 +119,18 @@ Resources:
 
 Outputs:
   PublicEventServiceApi:
-    Description: "Endpoint"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+    Description: 'Endpoint'
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'
   UserPool:
-    Description: "ID"
+    Description: 'ID'
     Value: !Ref UserPool
     Export:
-      Name: "UserPool::Id"
+      Name: 'UserPool::Id'
   UserPoolClient:
-    Description: "ID"
+    Description: 'ID'
     Value: !Ref UserPoolClient
     Export:
-      Name: "UserPoolClient::Id"
+      Name: 'UserPoolClient::Id'
   PrivateEventServiceApi:
-    Description: "Endpoint"
-    Value: !Sub "https://${PrivateEventServiceApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+    Description: 'Endpoint'
+    Value: !Sub 'https://${PrivateEventServiceApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'
