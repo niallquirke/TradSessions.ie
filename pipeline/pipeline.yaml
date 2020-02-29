@@ -16,18 +16,18 @@ Parameters:
   GithubRepo:
     Description: Gitub Repository name
     Type: AWS::SSM::Parameter::Value<String>
-    Default: /service/tradsessionspipeline/github/repo
+    Default: /service/tradsessions/github/repo
 
   GithubToken:
     Description: Github OAuth Token with full permissions on admin:repo_hook and repo
     Type: AWS::SSM::Parameter::Value<String>
     NoEcho: true
-    Default: /service/tradsessionspipeline/github/token
+    Default: /service/tradsessions/github/token
 
   GithubUser:
     Description: Github user where the repository lives
     Type: AWS::SSM::Parameter::Value<String>
-    Default: /service/tradsessionspipeline/github/user
+    Default: /service/tradsessions/github/user
 
 Resources:
   ######   #######  ##     ## ########   ######  ########
@@ -50,7 +50,7 @@ Resources:
         - Key: 'Stack'
           Value: !Ref AWS::StackName
         - Key: 'Project'
-          Value: TradSessionsPipeline
+          Value: TradSessions
     DeletionPolicy: Retain
 
   ########  ##     ## #### ##       ########
@@ -64,8 +64,8 @@ Resources:
   CodeBuildProject:
     Type: AWS::CodeBuild::Project
     Properties:
-      Name: tradsessionspipeline
-      Description: Build project for the TradSessionsPipeline
+      Name: tradsessions
+      Description: Build project for the TradSessions
       Artifacts:
         Type: CODEPIPELINE
       Environment:
@@ -85,7 +85,7 @@ Resources:
         - Key: 'Stack'
           Value: !Ref AWS::StackName
         - Key: 'Project'
-          Value: TradSessionsPipeline
+          Value: TradSessions
 
   ########  #### ########  ######## ##       #### ##    ## ########
   ##     ##  ##  ##     ## ##       ##        ##  ###   ## ##
@@ -101,7 +101,7 @@ Resources:
       ArtifactStore:
         Location: !Ref BuildArtifactsBucket
         Type: S3
-      Name: tradsessionspipeline
+      Name: tradsessions
       RoleArn: !GetAtt CodePipelineExecutionRole.Arn
       Stages:
         - Name: Source
@@ -135,7 +135,7 @@ Resources:
                 - Name: SourceCodeAsZip
               OutputArtifacts:
                 - Name: BuildArtifactAsZip
-        - Name: Beta
+        - Name: Test
           Actions:
             - Name: CreateChangeSet
               ActionTypeId:
@@ -147,9 +147,9 @@ Resources:
                 # More info on Possible Values for Cloudformation: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/continuous-delivery-codepipeline-action-reference.html#w2ab2c13c13b9
                 ActionMode: CHANGE_SET_REPLACE
                 RoleArn: !GetAtt CloudFormationExecutionRole.Arn
-                StackName: tradsessionspipeline-Beta
-                ChangeSetName: tradsessionspipeline-ChangeSet-Beta
-                TemplatePath: BuildArtifactAsZip::Backend/template.yaml
+                StackName: tradsessions-Test
+                ChangeSetName: tradsessions-ChangeSet-Test
+                TemplatePath: BuildArtifactAsZip::template.yaml
                 Capabilities: CAPABILITY_IAM
               InputArtifacts:
                 - Name: BuildArtifactAsZip
@@ -163,42 +163,10 @@ Resources:
               Configuration:
                 ActionMode: CHANGE_SET_EXECUTE
                 RoleArn: !GetAtt CloudFormationExecutionRole.Arn
-                StackName: tradsessionspipeline-Beta
-                ChangeSetName: tradsessionspipeline-ChangeSet-Beta
+                StackName: tradsessions-Test
+                ChangeSetName: tradsessions-ChangeSet-Test
               OutputArtifacts:
-                - Name: tradsessionspipelineBetaChangeSet
-              RunOrder: 2
-        - Name: Gamma
-          Actions:
-            - Name: CreateChangeSet
-              ActionTypeId:
-                Category: Deploy
-                Owner: AWS
-                Provider: CloudFormation
-                Version: '1'
-              Configuration:
-                ActionMode: CHANGE_SET_REPLACE
-                RoleArn: !GetAtt CloudFormationExecutionRole.Arn
-                StackName: tradsessionspipeline-Gamma
-                ChangeSetName: tradsessionspipeline-ChangeSet-Gamma
-                TemplatePath: BuildArtifactAsZip::Backend/template.yaml
-                Capabilities: CAPABILITY_IAM
-              InputArtifacts:
-                - Name: BuildArtifactAsZip
-              RunOrder: 1
-            - Name: ExecuteChangeSet
-              ActionTypeId:
-                Category: Deploy
-                Owner: AWS
-                Provider: CloudFormation
-                Version: '1'
-              Configuration:
-                ActionMode: CHANGE_SET_EXECUTE
-                RoleArn: !GetAtt CloudFormationExecutionRole.Arn
-                StackName: tradsessionspipeline-Gamma
-                ChangeSetName: tradsessionspipeline-ChangeSet-Gamma
-              OutputArtifacts:
-                - Name: tradsessionspipelineGammaChangeSet
+                - Name: tradsessionsTestChangeSet
               RunOrder: 2
         - Name: Prod
           Actions:
@@ -218,9 +186,9 @@ Resources:
               Configuration:
                 ActionMode: CHANGE_SET_REPLACE
                 RoleArn: !GetAtt CloudFormationExecutionRole.Arn
-                StackName: tradsessionspipeline-Prod
-                ChangeSetName: tradsessionspipeline-ChangeSet-Prod
-                TemplatePath: BuildArtifactAsZip::Backend/template.yaml
+                StackName: tradsessions-Prod
+                ChangeSetName: tradsessions-ChangeSet-Prod
+                TemplatePath: BuildArtifactAsZip::template.yaml
                 Capabilities: CAPABILITY_IAM
               InputArtifacts:
                 - Name: BuildArtifactAsZip
@@ -234,10 +202,10 @@ Resources:
               Configuration:
                 ActionMode: CHANGE_SET_EXECUTE
                 RoleArn: !GetAtt CloudFormationExecutionRole.Arn
-                StackName: tradsessionspipeline-Prod
-                ChangeSetName: tradsessionspipeline-ChangeSet-Prod
+                StackName: tradsessions-Prod
+                ChangeSetName: tradsessions-ChangeSet-Prod
               OutputArtifacts:
-                - Name: tradsessionspipelineProdChangeSet
+                - Name: tradsessionsProdChangeSet
               RunOrder: 3
 
   ####    ###    ##     ##
@@ -272,8 +240,8 @@ Resources:
                   - 'logs:CreateLogStream'
                   - 'logs:PutLogEvents'
                 Resource:
-                  - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/tradsessionspipeline'
-                  - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/tradsessionspipeline:*'
+                  - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/tradsessions'
+                  - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/tradsessions:*'
         - PolicyName: CodeBuildArtifactsBucket
           PolicyDocument:
             Version: '2012-10-17'
@@ -363,7 +331,7 @@ Resources:
                   - 'cloudformation:SetStackPolicy'
                   - 'cloudformation:ValidateTemplate'
                 Resource:
-                  - !Sub 'arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/tradsessionspipeline*/*'
+                  - !Sub 'arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/tradsessions*/*'
                   - !Sub 'arn:aws:cloudformation:${AWS::Region}:aws:transform/Serverless-2016-10-31'
 
 Outputs:

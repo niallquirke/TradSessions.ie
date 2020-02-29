@@ -33,7 +33,7 @@ export default {
           hid: 'description',
           name: 'description',
           content:
-            'A list of the top traditional Irish music sessions in Ireland'
+            'A platform to find, share and review Irish traditional music sessions.'
         }
       ]
     }

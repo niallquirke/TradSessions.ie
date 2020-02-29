@@ -113,15 +113,11 @@ Outputs:
     Description: 'Endpoint'
     Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'
   TradSessionsUserPool:
-    Description: 'ID'
+    Description: 'TradSessionsUserPool-ID'
     Value: !Ref TradSessionsUserPool
-    Export:
-      Name: 'TradSessionsUserPool::Id'
   TradSessionsUserPoolClient:
-    Description: 'ID'
+    Description: 'TradSessionsUserPoolClient-ID'
     Value: !Ref TradSessionsUserPoolClient
-    Export:
-      Name: 'TradSessionsUserPoolClient::Id'
   TradSessionsPrivateEventServiceApi:
     Description: 'Endpoint'
     Value: !Sub 'https://${TradSessionsPrivateEventServiceApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'

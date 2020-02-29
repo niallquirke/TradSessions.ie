@@ -26,7 +26,7 @@ phases:
     commands:
       # Use Build phase to build your artifacts (compile, package, etc.)
       # - echo "[Build phase]"
-      # We package the SAM template and create `Backend/template.yaml` file that will be used in our pipeline for deployment
+      # We package the SAM template and create `template.yaml` file that will be used in our pipeline for deployment
       ## Here we separate Build from Deployment and segregate permissions for different steps
       - echo "Starting SAM packaging `date` in `pwd`"
       - aws cloudformation package --template-file Backend/template.yaml --s3-bucket $BUILD_OUTPUT_BUCKET --output-template-file Backend/template.yaml
