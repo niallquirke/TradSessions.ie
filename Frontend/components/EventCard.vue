@@ -7,7 +7,9 @@
       <span class="eyebrow">{{ event.day }} @ {{ event.time }}</span>
       <span class="rank">{{ rank }}.</span>
       <h4>{{ event.title }}</h4>
-      <BaseIcon name="users">0 comments</BaseIcon>
+      <BaseIcon icon="/feather-sprite.svg#" name="users">
+        <span class="comments">0 comments</span></BaseIcon
+      >
     </div>
   </nuxt-link>
 </template>
@@ -48,5 +50,8 @@ export default {
   right: 5%;
   font-size: 20px;
   color: grey;
+}
+.comments {
+  margin-left: 6px;
 }
 </style>

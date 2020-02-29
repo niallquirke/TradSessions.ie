@@ -5,12 +5,11 @@
     >
     <nav>
       <n-link to="/event/create" @click.native="setDirectedFromCreate(true)"
-        >Create</n-link
-      >
-      |
+        ><BaseIcon name="plus" width="50" height="50" color="green"></BaseIcon
+      ></n-link>
       <n-link to="/profile" @click.native="setDirectedFromCreate(false)"
-        >Profile</n-link
-      >
+        ><BaseIcon name="user" width="50" height="50" color="green"></BaseIcon
+      ></n-link>
     </nav>
   </div>
 </template>
