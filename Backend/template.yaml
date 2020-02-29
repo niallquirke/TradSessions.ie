@@ -1,0 +1,116 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  A platform to find, share and review Irish traditional music sessions.
+
+Resources:
+  PublicEventService:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: PublicEventService/
+      Handler: public_event_service.public_event_handler
+      Runtime: python3.7
+      Policies: AmazonDynamoDBFullAccess
+      Events:
+        PublicEventServiceApi:
+          Type: Api
+          Properties:
+            Path: /events
+            Method: any
+
+  EventTable:
+    Type: AWS::Serverless::SimpleTable
+
+  RankingTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: rank
+        Type: Number
+
+  UserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: tradsessions
+      UserPoolId: !Ref UserPool
+
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      GenerateSecret: false
+
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      AliasAttributes:
+        - email
+      UsernameConfiguration:
+        CaseSensitive: False
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 7
+      AutoVerifiedAttributes:
+        - email
+      EmailConfiguration:
+        EmailSendingAccount: COGNITO_DEFAULT
+      VerificationMessageTemplate:
+        DefaultEmailOption: CONFIRM_WITH_LINK
+        EmailSubjectByLink: 'Your TradSessions.ie Verification Link'
+        EmailMessageByLink: 'Please click the following link to verify your email: {##Verify Email##}'
+
+  PrivateEventServiceApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Auth:
+        DefaultAuthorizer: CognitoAuthorizer
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn: !GetAtt UserPool.Arn
+        AddDefaultAuthorizerToCorsPreflight: False
+      Cors:
+        AllowOrigin: "'*'"
+        AllowHeaders: "'*'"
+        AllowMethods: "'*'"
+      GatewayResponses:
+        DEFAULT_4XX:
+          ResponseParameters:
+            Headers:
+              Access-Control-Allow-Origin: "'*'"
+
+  PrivateEventService:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: PrivateEventService/
+      Handler: private_event_service.private_event_handler
+      Runtime: python3.7
+      Policies: AmazonDynamoDBFullAccess
+      Events:
+        PrivateEventServiceApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PrivateEventServiceApi
+            Path: /events
+            Method: any
+
+  UserTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: user
+        Type: String
+
+Outputs:
+  PublicEventServiceApi:
+    Description: 'Endpoint'
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'
+  UserPool:
+    Description: 'UserPool-ID'
+    Value: !Ref UserPool
+  UserPoolClient:
+    Description: 'UserPoolClient-ID'
+    Value: !Ref UserPoolClient
+  PrivateEventServiceApi:
+    Description: 'Endpoint'
+    Value: !Sub 'https://${PrivateEventServiceApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'
