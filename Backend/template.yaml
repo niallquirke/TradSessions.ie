@@ -4,7 +4,7 @@ Description: >
   A platform to find, share and review Irish traditional music sessions.
 
 Resources:
-  TradSessionsPublicEventService:
+  PublicEventService:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: PublicEventService/
@@ -18,29 +18,29 @@ Resources:
             Path: /events
             Method: any
 
-  TradSessionsEventTable:
+  EventTable:
     Type: AWS::Serverless::SimpleTable
 
-  TradSessionsRankingTable:
+  RankingTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
       PrimaryKey:
         Name: rank
         Type: Number
 
-  TradSessionsUserPoolDomain:
+  UserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
       Domain: tradsessions
-      UserPoolId: !Ref TradSessionsUserPool
+      UserPoolId: !Ref UserPool
 
-  TradSessionsUserPoolClient:
+  UserPoolClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
-      UserPoolId: !Ref TradSessionsUserPool
+      UserPoolId: !Ref UserPool
       GenerateSecret: false
 
-  TradSessionsUserPool:
+  UserPool:
     Type: AWS::Cognito::UserPool
     Properties:
       AliasAttributes:
@@ -59,7 +59,7 @@ Resources:
         EmailSubjectByLink: 'Your TradSessions.ie Verification Link'
         EmailMessageByLink: 'Please click the following link to verify your email: {##Verify Email##}'
 
-  TradSessionsPrivateEventServiceApi:
+  PrivateEventServiceApi:
     Type: AWS::Serverless::Api
     Properties:
       StageName: Prod
@@ -67,7 +67,7 @@ Resources:
         DefaultAuthorizer: CognitoAuthorizer
         Authorizers:
           CognitoAuthorizer:
-            UserPoolArn: !GetAtt TradSessionsUserPool.Arn
+            UserPoolArn: !GetAtt UserPool.Arn
         AddDefaultAuthorizerToCorsPreflight: False
       Cors:
         AllowOrigin: "'*'"
@@ -79,7 +79,7 @@ Resources:
             Headers:
               Access-Control-Allow-Origin: "'*'"
 
-  TradSessionsPrivateEventService:
+  PrivateEventService:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: PrivateEventService/
@@ -87,14 +87,14 @@ Resources:
       Runtime: python3.7
       Policies: AmazonDynamoDBFullAccess
       Events:
-        TradSessionsPrivateEventServiceApi:
+        PrivateEventServiceApi:
           Type: Api
           Properties:
-            RestApiId: !Ref TradSessionsPrivateEventServiceApi
+            RestApiId: !Ref PrivateEventServiceApi
             Path: /events
             Method: any
 
-  TradSessionsUserTable:
+  UserTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
       PrimaryKey:
@@ -102,15 +102,15 @@ Resources:
         Type: String
 
 Outputs:
-  TradSessionsPublicEventServiceApi:
+  PublicEventServiceApi:
     Description: 'Endpoint'
     Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'
-  TradSessionsUserPool:
-    Description: 'TradSessionsUserPool-ID'
-    Value: !Ref TradSessionsUserPool
-  TradSessionsUserPoolClient:
-    Description: 'TradSessionsUserPoolClient-ID'
-    Value: !Ref TradSessionsUserPoolClient
-  TradSessionsPrivateEventServiceApi:
+  UserPool:
+    Description: 'UserPool-ID'
+    Value: !Ref UserPool
+  UserPoolClient:
+    Description: 'UserPoolClient-ID'
+    Value: !Ref UserPoolClient
+  PrivateEventServiceApi:
     Description: 'Endpoint'
-    Value: !Sub 'https://${TradSessionsPrivateEventServiceApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'
+    Value: !Sub 'https://${PrivateEventServiceApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'
