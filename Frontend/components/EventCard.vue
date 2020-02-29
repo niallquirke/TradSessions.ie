@@ -4,7 +4,8 @@
     class="event-link"
   >
     <div class="event-card -shadow">
-      <span class="eyebrow">{{ event.day }} @ {{ event.time }} </span>
+      <span class="eyebrow">{{ event.day }} @ {{ event.time }}</span>
+      <span class="rank">{{ rank }}</span>
       <h4>{{ event.title }}</h4>
       <BaseIcon name="users">0 comments</BaseIcon>
     </div>
@@ -15,18 +16,20 @@
 export default {
   name: 'EventCard',
   props: {
-    // eslint-disable-next-line vue/require-default-prop
-    event: Object
+    event: Object,
+    rank: Number
   }
 }
 </script>
 <style scoped>
 .event-card {
+  background-color: white;
   padding: 20px;
   margin-bottom: 24px;
   transition: all 0.2s linear;
   cursor: pointer;
   border-radius: 15px;
+  position: relative;
 }
 .event-card:hover {
   transform: scale(1.01);
@@ -39,5 +42,11 @@ export default {
   color: black;
   text-decoration: none;
   font-weight: 100;
+}
+.rank {
+  position: absolute;
+  right: 5%;
+  font-size: 20px;
+  color: grey;
 }
 </style>

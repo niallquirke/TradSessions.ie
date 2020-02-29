@@ -26,19 +26,16 @@ export default {
 </script>
 
 <style scoped>
-.brand {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
-  font-size: 1.5em;
-  color: #39b982;
-  text-decoration: none;
-}
 .nav {
+  background-color: #fff;
+  height: 60px;
+  padding: 0 20px 0px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 60px;
   font-size: 1.2em;
+  border: 1px solid #dbdbdb;
+  border-radius: 0px 0px 15px 15px;
 }
 .nav .nav-item {
   box-sizing: border-box;
@@ -52,5 +49,12 @@ export default {
 }
 .nav a {
   display: inline-block;
+}
+.brand {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 1.5em;
+  color: #39b982;
+  text-decoration: none;
 }
 </style>

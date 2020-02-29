@@ -4,7 +4,7 @@ import boto3
 EVENT_TABLE = 'tradsesh-0.1'
 RANKING_TABLE = 'tradsesh-ranking-0.1'
 USER_TABLE = 'tradsesh-UserTable'
-EVENTS_PER_PAGE = 8
+EVENTS_PER_PAGE = 10
 
 ddb_client = boto3.client('dynamodb')
 
@@ -20,7 +20,7 @@ def get_page(user, page):
     event_ids = get_user_event_ids(user)
     for event_id in event_ids:
         event_list.append(get_event(event_id))
-    return {'status': 200, 'body': {"events": event_list}}
+    return {'status': 200, 'body': {'events': event_list}}
 
 
 def get_user_event_ids(user):
@@ -41,14 +41,13 @@ def get_event(event_id):
 def create_event(event):
     event = json.loads(event)
     number_of_events = len(ddb_client.scan(TableName=RANKING_TABLE)['Items'])
-    event["rank"] = str(number_of_events)
     ddb_client.put_item(
         TableName=EVENT_TABLE,
         Item=json_to_ddb_event(event)
     )
     ddb_client.put_item(
         TableName=RANKING_TABLE,
-        Item=json_to_ddb_rank(event)
+        Item=json_to_ddb_rank(event, number_of_events)
     )
     ddb_user = ddb_client.get_item(
         TableName=USER_TABLE,
@@ -69,7 +68,7 @@ def create_event(event):
             TableName=USER_TABLE,
             Item=json_to_ddb_user(event['user'], [event['id']])
         )
-    return {'status': 200, 'body': {"Message": "Successfully created event"}}
+    return {'status': 200, 'body': {'Message': 'Successfully created event'}}
 
 
 #####################
@@ -117,23 +116,21 @@ def _unmarshal_value(node):
 
 def json_to_ddb_event(event):
     return {
-        "id": {"S": event["id"]},
-        "user": {"S": event["user"]},
-        "title": {"S": event["title"]},
-        "description": {"S": event["description"]},
-        "location": {"S": event["location"]},
-        "day": {"S": event["day"]},
-        "time": {"S": event["time"]},
-        "rank": {"N": event["rank"]},
-        "comments": {"L": []},
-        "county": {"S": event["county"]}
+        'id': {'S': event['id']},
+        'user': {'S': event['user']},
+        'title': {'S': event['title']},
+        'craic': {'S': event['craic']},
+        'location': {'S': event['location']},
+        'day': {'S': event['day']},
+        'time': {'S': event['time']},
+        'county': {'S': event['county']}
     }
 
 
-def json_to_ddb_rank(event):
+def json_to_ddb_rank(event, number_of_events):
     return {
-        "rank": {"N": event["rank"]},
-        "id": {"S": event["id"]}
+        'rank': {'N': str(number_of_events)},
+        'id': {'S': event['id']}
     }
 
 
@@ -143,8 +140,8 @@ def json_to_ddb_user(user, event_ids):
         ddb_event_ids.append({'S': event_id})
     print(ddb_event_ids)
     return {
-        "user": {"S": user},
-        "event_ids": {"L": ddb_event_ids}
+        'user': {'S': user},
+        'event_ids': {'L': ddb_event_ids}
     }
 
 
@@ -175,10 +172,10 @@ def private_event_handler(event, context):
     return {
         'statusCode': response['status'],
         'headers': {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Headers": "*",
-            "Access-Control-Allow-Methods": "*",
-            "Access-Control-Allow-Credentials": True
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': '*',
+            'Access-Control-Allow-Methods': '*',
+            'Access-Control-Allow-Credentials': True
         },
         'body': json.dumps(response['body'])
     }

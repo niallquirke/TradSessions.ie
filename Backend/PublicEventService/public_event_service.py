@@ -1,9 +1,9 @@
 import json
 import boto3
 
-INFO_TABLE = 'tradsesh-0.1'
+EVENT_TABLE = 'tradsesh-0.1'
 RANKING_TABLE = 'tradsesh-ranking-0.1'
-EVENTS_PER_PAGE = 8
+EVENTS_PER_PAGE = 10
 
 client = boto3.client('dynamodb')
 resource = boto3.resource('dynamodb')
@@ -41,7 +41,7 @@ def get_event_id(rank):
 
 def get_event(event_id):
     try:
-        dynamo = client.get_item(TableName=INFO_TABLE, Key={
+        dynamo = client.get_item(TableName=EVENT_TABLE, Key={
                                  'id': {'S': event_id}})
         return {'status': 200, 'body': unmarshal_dynamodb_json(dynamo['Item'])}
     except:  # noqa E722

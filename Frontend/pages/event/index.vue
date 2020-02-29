@@ -1,15 +1,15 @@
 <template>
-  <div>
+  <div class="body">
     <div class="event-header">
       <h1 class="title">{{ event.title }}</h1>
-      <h5>By {{ event.user.name }}</h5>
+      <h5>By {{ event.user }}</h5>
     </div>
     <h2>Where</h2>
-    <p>{{ event.location }}</p>
+    <p>{{ event.location }}, {{ event.county }}</p>
     <h2>When</h2>
     <p>{{ event.day }} @ {{ event.time }}</p>
     <h2>The Craic</h2>
-    <p>{{ event.description }}</p>
+    <p>{{ event.craic }}</p>
   </div>
 </template>
 
@@ -52,7 +52,7 @@ export default {
   margin-left: 10px;
 }
 .event-header > .title {
-  margin: 0;
+  margin-top: 4%;
 }
 .list-group {
   margin: 0;

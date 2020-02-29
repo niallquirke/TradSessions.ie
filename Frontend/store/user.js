@@ -12,6 +12,7 @@ export const mutations = {
   SET_USER(state, response) {
     state.idToken = response.idToken.jwtToken
     state.user = response.idToken.payload
+    state.user.username = state.user['cognito:username']
     localStorage.setItem('TradSessionsUser', JSON.stringify(response))
   },
   CLEAR_USER() {
@@ -39,7 +40,7 @@ export const actions = {
   },
   fetchUserEvents({ commit, state }, page) {
     return PrivateEventService.getUserEvents(
-      state.user.preferred_username,
+      state.user.username,
       page,
       state.idToken
     ).then((response) => {
@@ -49,8 +50,8 @@ export const actions = {
   setDirectedFromCreate({ commit }, directed) {
     commit('SET_DIRECTED_FROM_CREATE', directed)
   },
-  createEvent({ commit, state }, event) {
-    event.user = state.user.preferred_username
+  createEvent({ state }, event) {
+    event.user = state.user.username
     return PrivateEventService.createEvent(event, state.idToken)
   }
 }

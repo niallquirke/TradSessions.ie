@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="body">
     <h1>Create a Session</h1>
     <form @submit.prevent="createEvent">
       <h3>Session</h3>
@@ -70,14 +70,14 @@
 
       <h3>The Craic</h3>
       <BaseInput
-        v-model="event.description"
-        :class="{ error: $v.event.description.$error }"
-        @blur="$v.event.description.$touch()"
+        v-model="event.craic"
+        :class="{ error: $v.event.craic.$error }"
+        @blur="$v.event.craic.$touch()"
         placeholder="Lovely Pints"
         type="text"
       />
-      <div v-if="$v.event.description.$error">
-        <p v-if="!$v.event.description.required" class="errorMessage">
+      <div v-if="$v.event.craic.$error">
+        <p v-if="!$v.event.craic.required" class="errorMessage">
           The craic is required.
         </p>
       </div>
@@ -170,8 +170,7 @@ export default {
         county: '',
         day: '',
         time: '',
-        description: '',
-        comments: []
+        craic: ''
       }
     },
     createEvent() {
@@ -193,7 +192,7 @@ export default {
       county: { required },
       day: { required },
       time: { required },
-      description: { required }
+      craic: { required }
     }
   }
 }

@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <H1>{{ user.preferred_username }}'s Events</H1>
+  <div class="body">
+    <H1>{{ capatilizedUsername }}'s Events</H1>
     <p v-show="events.events.length == 0">
-      You haven't created any sessions yet :(
+      You haven't created any sessions yet.
     </p>
     <p v-show="events.events.length == 0">
       <n-link to="/event/create">Create a one now!</n-link>
@@ -37,6 +37,12 @@ export default {
   computed: {
     page() {
       return parseInt(this.$route.query.page) || 1
+    },
+    capatilizedUsername() {
+      return (
+        this.user.username.charAt(0).toUpperCase() +
+        this.user.username.substring(1)
+      )
     },
     ...mapState({
       events: (state) => state.user.events,

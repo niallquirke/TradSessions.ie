@@ -1,7 +1,8 @@
 import axios from 'axios'
+import endpoints from '@/cloud.config'
 
 const apiClient = axios.create({
-  baseURL: 'https://jzkmw995q4.execute-api.eu-west-1.amazonaws.com/Prod/',
+  baseURL: endpoints.PrivateEventServiceApiEndpoint,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json'

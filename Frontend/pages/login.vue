@@ -1,82 +1,78 @@
 <template>
-  <div class="login-wrapper">
-    <div class="login">
-      <h2>So who's this now?</h2>
-
-      <p v-show="directedFromCreate">
-        You must be logged in to create events
-      </p>
-
-      <input v-model="login" class="toggle" type="checkbox" />
-
-      <form @submit.prevent="signupLogin">
-        <label v-show="!login" for="username">Username:</label>
-        <BaseInput
-          v-show="!login"
-          v-model="user.username"
-          :class="{ error: $v.user.username.$error }"
-          @blur="$v.user.username.$touch()"
-          type="text"
-          name="username"
-        />
-        <div v-if="$v.user.username.$error">
-          <p v-if="!$v.user.username.required" class="errorMessage">
-            Username is required.
-          </p>
-        </div>
-
-        <label for="email">Email:</label>
-        <BaseInput
-          v-model="user.email"
-          :class="{ error: $v.user.email.$error }"
-          @blur="$v.user.email.$touch()"
-          type="email"
-          name="email"
-        />
-        <div v-if="$v.user.email.$error">
-          <p v-if="!$v.user.email.required" class="errorMessage">
-            Email is required.
-          </p>
-        </div>
-
-        <label for="password">Password:</label>
-        <BaseInput
-          v-model="user.password"
-          :class="{ error: $v.user.password.$error }"
-          @blur="$v.user.password.$touch()"
-          type="password"
-          name="password"
-        />
-        <div v-if="$v.user.password.$error">
-          <p v-if="!$v.user.password.required" class="errorMessage">
-            Password is required.
-          </p>
-        </div>
-
-        <label v-show="!login" for="password2">Confirm Password:</label>
-        <BaseInput
-          v-show="!login"
-          v-model="pwd_conf"
-          type="password"
-          name="pwd_conf"
-        />
-        <BaseButton
-          v-show="login"
-          type="submit"
-          name="button"
-          button-class="-fill-gradient"
-          >Login</BaseButton
-        >
-        <BaseButton
-          v-show="!login"
-          type="submit"
-          name="button"
-          button-class="-fill-gradient"
-          :disabled="$v.$anyError"
-          >Sign Up</BaseButton
-        >
-      </form>
-      <p class="err">{{ error }}</p>
+  <div class="body">
+    <div class="login-wrapper">
+      <div class="login">
+        <h2 style="display:inline-block">So who's this now?</h2>
+        <p v-show="directedFromCreate">
+          You must be logged in to create events
+        </p>
+        <input v-model="isLogin" class="toggle" type="checkbox" />
+        <form @submit.prevent="signupLogin">
+          <label v-show="!isLogin" for="username">Username:</label>
+          <BaseInput
+            v-show="!isLogin"
+            v-model="user.username"
+            :class="{ error: $v.user.username.$error }"
+            @blur="$v.user.username.$touch()"
+            type="text"
+            name="username"
+          />
+          <div v-if="$v.user.username.$error">
+            <p v-if="!$v.user.username.required" class="errorMessage">
+              Username is required.
+            </p>
+          </div>
+          <label for="email">Email:</label>
+          <BaseInput
+            v-model="user.email"
+            :class="{ error: $v.user.email.$error }"
+            @blur="$v.user.email.$touch()"
+            type="email"
+            name="email"
+          />
+          <div v-if="$v.user.email.$error">
+            <p v-if="!$v.user.email.required" class="errorMessage">
+              Email is required.
+            </p>
+          </div>
+          <label for="password">Password:</label>
+          <BaseInput
+            v-model="user.password"
+            :class="{ error: $v.user.password.$error }"
+            @blur="$v.user.password.$touch()"
+            type="password"
+            name="password"
+          />
+          <div v-if="$v.user.password.$error">
+            <p v-if="!$v.user.password.required" class="errorMessage">
+              Password is required.
+            </p>
+          </div>
+          <label v-show="!isLogin" for="password2">Confirm Password:</label>
+          <BaseInput
+            v-show="!isLogin"
+            v-model="pwd_conf"
+            type="password"
+            name="pwd_conf"
+          />
+          <BaseButton
+            v-show="isLogin"
+            type="submit"
+            name="button"
+            button-class="-fill-gradient"
+            >Login</BaseButton
+          >
+          <BaseButton
+            v-show="!isLogin"
+            :disabled="$v.$anyError"
+            type="submit"
+            name="button"
+            button-class="-fill-gradient"
+            >Sign Up</BaseButton
+          >
+        </form>
+        <p class="err">{{ error }}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -94,14 +90,14 @@ export default {
         email: '',
         password: ''
       },
-      login: false,
+      isLogin: false,
       pwd_conf: '',
       error: null
     }
   },
   computed: {
     isRequired() {
-      return !this.login
+      return !this.isLogin
     },
     ...mapState({
       directedFromCreate: (state) => state.user.directedFromCreate
@@ -109,14 +105,14 @@ export default {
   },
   methods: {
     signupLogin() {
-      if (this.login) {
+      if (this.isLogin) {
         this.$store
           .dispatch('user/login', this.user)
           .then((response) => {
             if (this.directedFromCreate) {
               this.$router.push({ path: '/event/create' })
             } else {
-              this.$router.push({ path: '/' })
+              this.$router.push({ path: '/profile' })
             }
           })
           .catch((err) => {
@@ -132,7 +128,7 @@ export default {
                 this.user.email +
                 '". Please click the link in the email to verify your account 😊'
             )
-            this.login = true
+            this.isLogin = true
           })
           .catch((err) => {
             this.error = err.message
@@ -155,11 +151,12 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
 }
 .login {
   width: 80%;
   text-align: center;
-  margin-top: 10%;
+  margin-top: 2%;
 }
 .toggle {
   -webkit-appearance: none;
@@ -208,7 +205,7 @@ export default {
 }
 p {
   margin-top: -10px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 .err {
   color: red;

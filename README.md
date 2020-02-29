@@ -1,3 +1,3 @@
 # TradSessions.ie
 
-Platform for finding, sharing and rating Irish trad sessions.
+A platform to find, share and review Irish traditional music sessions.

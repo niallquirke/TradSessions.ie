@@ -4,24 +4,23 @@ import {
   AuthenticationDetails,
   CognitoUser
 } from 'amazon-cognito-identity-js'
+import endpoints from '@/cloud.config'
 
 const poolData = {
-  UserPoolId: 'eu-west-1_qwy9mxF19',
-  ClientId: '6g7ob7m7fbl35b5kkletv5iskq'
+  UserPoolId: endpoints.UserPoolID,
+  ClientId: endpoints.UserPoolClientID
 }
 const userPool = new CognitoUserPool(poolData)
 
 export default {
   signup(user) {
     const dataEmail = { Name: 'email', Value: user.email }
-    const dataUsername = { Name: 'preferred_username', Value: user.username }
     const attributeEmail = new CognitoUserAttribute(dataEmail)
-    const attributeUsername = new CognitoUserAttribute(dataUsername)
     return new Promise((resolve, reject) =>
       userPool.signUp(
-        user.email,
+        user.username,
         user.password,
-        [attributeEmail, attributeUsername],
+        [attributeEmail],
         null,
         (err, result) => {
           if (err) {

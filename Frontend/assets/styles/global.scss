@@ -10,11 +10,11 @@ body {
   line-height: 1.5;
   padding: 0em;
   margin: 0em;
+  background-color: #fafafa;
 }
 #app {
   box-sizing: border-box;
   width: 500px;
-  padding: 0 20px 20px;
   margin: 0 auto;
 }
 hr {
@@ -71,6 +71,9 @@ strong {
 }
 small {
   font-size: 80%;
+}
+.body {
+  padding: 0 20px 20px;
 }
 .eyebrow {
   font-size: 20px;

@@ -1,16 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  trad-sessions
-
-  TradSessions Event Service Template
-
-Globals:
-  Function:
-    Timeout: 3
+  A platform to find, share and review Irish traditional music sessions.
 
 Resources:
-  PublicEventService:
+  TradSessionsPublicEventService:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: PublicEventService/
@@ -24,42 +18,43 @@ Resources:
             Path: /events
             Method: any
 
-  EventTable:
+  TradSessionsEventTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
-      TableName: EventTable
+      TableName: TradSessionsEventTable
 
-  RankingTable:
+  TradSessionsRankingTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
-      TableName: RankingTable
+      TableName: TradSessionsRankingTable
       PrimaryKey:
         Name: rank
         Type: Number
 
-  UserTable:
-    Type: AWS::Serverless::SimpleTable
+  TradSessionsUserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
     Properties:
-      TableName: UserTable
-      PrimaryKey:
-        Name: username
-        Type: String
+      Domain: tradsessions
+      UserPoolId: !Ref TradSessionsUserPool
 
-  UserPool:
+  TradSessionsUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: TradSessionsUserPoolClient
+      UserPoolId: !Ref TradSessionsUserPool
+      GenerateSecret: false
+
+  TradSessionsUserPool:
     Type: AWS::Cognito::UserPool
     Properties:
+      UserPoolName: TradSessionsUserPool
+      AliasAttributes:
+        - email
+      UsernameConfiguration:
+        CaseSensitive: False
       Policies:
         PasswordPolicy:
           MinimumLength: 7
-      UsernameAttributes:
-        - email
-      Schema:
-        - AttributeDataType: String
-          Name: email
-          Required: true
-        - AttributeDataType: String
-          Name: preferred_username
-          Required: true
       AutoVerifiedAttributes:
         - email
       EmailConfiguration:
@@ -69,28 +64,16 @@ Resources:
         EmailSubjectByLink: 'Your TradSessions.ie Verification Link'
         EmailMessageByLink: 'Please click the following link to verify your email: {##Verify Email##}'
 
-  UserPoolClient:
-    Type: AWS::Cognito::UserPoolClient
-    Properties:
-      UserPoolId: !Ref UserPool
-      GenerateSecret: false
-
-  UserPoolDomain:
-    Type: AWS::Cognito::UserPoolDomain
-    Properties:
-      Domain: tradsessions
-      UserPoolId: !Ref UserPool
-
-  PrivateEventServiceApi:
+  TradSessionsPrivateEventServiceApi:
     Type: AWS::Serverless::Api
     Properties:
-      Name: PrivateEventServiceApi
+      Name: TradSessionsPrivateEventServiceApi
       StageName: Prod
       Auth:
         DefaultAuthorizer: CognitoAuthorizer
         Authorizers:
           CognitoAuthorizer:
-            UserPoolArn: !GetAtt UserPool.Arn
+            UserPoolArn: !GetAtt TradSessionsUserPool.Arn
         AddDefaultAuthorizerToCorsPreflight: False
       Cors:
         AllowOrigin: "'*'"
@@ -102,7 +85,7 @@ Resources:
             Headers:
               Access-Control-Allow-Origin: "'*'"
 
-  PrivateEventService:
+  TradSessionsPrivateEventService:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: PrivateEventService/
@@ -110,27 +93,35 @@ Resources:
       Runtime: python3.7
       Policies: AmazonDynamoDBFullAccess
       Events:
-        PrivateEventServiceApi:
+        TradSessionsPrivateEventServiceApi:
           Type: Api
           Properties:
-            RestApiId: !Ref PrivateEventServiceApi
+            RestApiId: !Ref TradSessionsPrivateEventServiceApi
             Path: /events
             Method: any
 
+  TradSessionsUserTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: TradSessionsUserTable
+      PrimaryKey:
+        Name: user
+        Type: String
+
 Outputs:
-  PublicEventServiceApi:
+  TradSessionsPublicEventServiceApi:
     Description: 'Endpoint'
     Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'
-  UserPool:
+  TradSessionsUserPool:
     Description: 'ID'
-    Value: !Ref UserPool
+    Value: !Ref TradSessionsUserPool
     Export:
-      Name: 'UserPool::Id'
-  UserPoolClient:
+      Name: 'TradSessionsUserPool::Id'
+  TradSessionsUserPoolClient:
     Description: 'ID'
-    Value: !Ref UserPoolClient
+    Value: !Ref TradSessionsUserPoolClient
     Export:
-      Name: 'UserPoolClient::Id'
-  PrivateEventServiceApi:
+      Name: 'TradSessionsUserPoolClient::Id'
+  TradSessionsPrivateEventServiceApi:
     Description: 'Endpoint'
-    Value: !Sub 'https://${PrivateEventServiceApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'
+    Value: !Sub 'https://${TradSessionsPrivateEventServiceApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'

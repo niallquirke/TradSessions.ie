@@ -1,8 +1,8 @@
 import axios from 'axios'
+import endpoints from '@/cloud.config'
 
 const apiClient = axios.create({
-  baseURL: 'https://0rdjsjwb3c.execute-api.eu-west-1.amazonaws.com/Prod/',
-  withCredentials: false,
+  baseURL: endpoints.PublicEventServiceApiEndpoint,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/x-www-form-urlencoded'
@@ -12,6 +12,7 @@ const apiClient = axios.create({
 
 export default {
   getEvents(page) {
+    console.log(endpoints.PublicEventServiceApiEndpoint)
     return apiClient.get('/events?page=' + page)
   },
   getEvent(id) {

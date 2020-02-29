@@ -1,11 +1,12 @@
 <template>
-  <div>
+  <div class="body">
     <H1>So what's the craic with the trad sessions?</H1>
     <EventCard
       v-for="(event, index) in events.events"
       :key="index"
-      :event="event"
       :data-index="index"
+      :event="event"
+      :rank="index + 1 + (page - 1) * 8"
     />
     <nuxt-link v-show="page != 1" :to="{ path: '/', query: { page: page - 1 } }"
       >Prev Page</nuxt-link
