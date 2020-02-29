@@ -339,4 +339,8 @@ $RECYCLE.BIN/
 
 */build/*
 
+# File for configuring backend endpoints and ID's
+
+*/cloud.config.js
+
 # End of https://www.gitignore.io/api/osx,linux,python,windows,pycharm,visualstudiocode
