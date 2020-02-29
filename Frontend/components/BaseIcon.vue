@@ -11,7 +11,6 @@
 export default {
   name: 'Icon',
   props: {
-    // eslint-disable-next-line vue/require-default-prop
     name: String,
     width: {
       type: [Number, String],

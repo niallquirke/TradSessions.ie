@@ -1,9 +1,9 @@
 import json
 import boto3
 
-EVENT_TABLE = 'tradsesh-0.1'
-RANKING_TABLE = 'tradsesh-ranking-0.1'
-EVENTS_PER_PAGE = 10
+EVENT_TABLE = 'TradSessionsEventTable'
+RANKING_TABLE = 'TradSessionsRankingTable'
+EVENTS_PER_PAGE = 11
 
 client = boto3.client('dynamodb')
 resource = boto3.resource('dynamodb')

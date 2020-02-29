@@ -5,7 +5,7 @@
   >
     <div class="event-card -shadow">
       <span class="eyebrow">{{ event.day }} @ {{ event.time }}</span>
-      <span class="rank">{{ rank }}</span>
+      <span class="rank">{{ rank }}.</span>
       <h4>{{ event.title }}</h4>
       <BaseIcon name="users">0 comments</BaseIcon>
     </div>

@@ -6,7 +6,7 @@
       :key="index"
       :data-index="index"
       :event="event"
-      :rank="index + 1 + (page - 1) * 8"
+      :rank="index + 1 + (page - 1) * 10"
     />
     <nuxt-link v-show="page != 1" :to="{ path: '/', query: { page: page - 1 } }"
       >Prev Page</nuxt-link
