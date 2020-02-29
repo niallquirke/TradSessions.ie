@@ -20,13 +20,10 @@ Resources:
 
   TradSessionsEventTable:
     Type: AWS::Serverless::SimpleTable
-    Properties:
-      TableName: TradSessionsEventTable
 
   TradSessionsRankingTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
-      TableName: TradSessionsRankingTable
       PrimaryKey:
         Name: rank
         Type: Number
@@ -40,14 +37,12 @@ Resources:
   TradSessionsUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
-      ClientName: TradSessionsUserPoolClient
       UserPoolId: !Ref TradSessionsUserPool
       GenerateSecret: false
 
   TradSessionsUserPool:
     Type: AWS::Cognito::UserPool
     Properties:
-      UserPoolName: TradSessionsUserPool
       AliasAttributes:
         - email
       UsernameConfiguration:
@@ -67,7 +62,6 @@ Resources:
   TradSessionsPrivateEventServiceApi:
     Type: AWS::Serverless::Api
     Properties:
-      Name: TradSessionsPrivateEventServiceApi
       StageName: Prod
       Auth:
         DefaultAuthorizer: CognitoAuthorizer
@@ -103,7 +97,6 @@ Resources:
   TradSessionsUserTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
-      TableName: TradSessionsUserTable
       PrimaryKey:
         Name: user
         Type: String
