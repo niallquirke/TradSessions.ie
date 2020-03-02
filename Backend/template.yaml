@@ -106,10 +106,10 @@ Outputs:
     Description: 'Endpoint'
     Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'
   UserPool:
-    Description: 'UserPool-ID'
+    Description: 'ID'
     Value: !Ref UserPool
   UserPoolClient:
-    Description: 'UserPoolClient-ID'
+    Description: 'ID'
     Value: !Ref UserPoolClient
   PrivateEventServiceApi:
     Description: 'Endpoint'

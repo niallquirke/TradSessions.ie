@@ -21,7 +21,7 @@
       >Next Page</nuxt-link
     >
     <!--<template v-if="page != 1 || !events.last_page">|</template>-->
-    <nuxt-link to="/" @click.native="logout">Log Out</nuxt-link>
+    <nuxt-link @click.native="logout" to="/">Log Out</nuxt-link>
   </div>
 </template>
 

@@ -1,14 +1,24 @@
 <template>
   <div class="nav">
-    <nuxt-link to="/" class="brand" @click.native="setDirectedFromCreate(false)"
+    <nuxt-link @click.native="setDirectedFromCreate(false)" to="/" class="brand"
       >TradSessions.ie</nuxt-link
     >
     <nav>
-      <n-link to="/event/create" @click.native="setDirectedFromCreate(true)"
-        ><BaseIcon name="plus" width="50" height="50" color="green"></BaseIcon
+      <n-link @click.native="setDirectedFromCreate(true)" to="/event/create"
+        ><BaseIcon
+          name="plus"
+          width="50px"
+          height="50px"
+          color="green"
+        ></BaseIcon
       ></n-link>
-      <n-link to="/profile" @click.native="setDirectedFromCreate(false)"
-        ><BaseIcon name="user" width="50" height="50" color="green"></BaseIcon
+      <n-link @click.native="setDirectedFromCreate(false)" to="/profile"
+        ><BaseIcon
+          name="user"
+          width="50px"
+          height="50px"
+          color="green"
+        ></BaseIcon
       ></n-link>
     </nav>
   </div>

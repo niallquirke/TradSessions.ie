@@ -12,7 +12,6 @@ const apiClient = axios.create({
 
 export default {
   getEvents(page) {
-    console.log(endpoints.PublicEventServiceApiEndpoint)
     return apiClient.get('/events?page=' + page)
   },
   getEvent(id) {

@@ -75,7 +75,7 @@ export default {
         error({
           statusCode: 503,
           message:
-            'Unable to fetch events at this time. Please try again later.'
+            'Unable to fetch events at this time, please try again later.'
         })
       }
     }

@@ -16,6 +16,7 @@ export const mutations = {
 
 export const actions = {
   fetchEvents({ commit }, page) {
+    console.log(page)
     return PublicEventService.getEvents(page).then((response) => {
       commit('SET_EVENTS', response.data)
     })

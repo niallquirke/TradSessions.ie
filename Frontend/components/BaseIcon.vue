@@ -1,5 +1,5 @@
 <template>
-  <div class="icon-wrapper" :class="color">
+  <div :class="color" class="icon-wrapper">
     <svg :width="width" :height="height" class="icon">
       <use v-bind="{ href: '/feather-sprite.svg#' + name }" />
     </svg>
@@ -14,11 +14,11 @@ export default {
     name: String,
     width: {
       type: [Number, String],
-      default: 24
+      default: '24px'
     },
     height: {
       type: [Number, String],
-      default: 24
+      default: '24px'
     },
     color: {
       type: String,
