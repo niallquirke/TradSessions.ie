@@ -2,7 +2,7 @@
 
 **Non-tech: A platform to find, share and review Irish traditional music sessions.**
 
-**Tech: A completely serverless, mobile first, web application with enterprise standard infrastructure, management and deployment**
+**Tech: A completely serverless, infrastructure-as-code, mobile first, web application with enterprise standard infrastructure, management and deployment**
 
 ## Frontend
 
