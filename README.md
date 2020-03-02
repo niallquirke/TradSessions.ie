@@ -6,7 +6,7 @@
 
 ## Frontend
 
-![](readme_images/TradSessions.ie%20-%20Home.jpg)
+<img src="readme_images/TradSessions.ie - Home.jpg" width="250">
 
 ## Backend
 
