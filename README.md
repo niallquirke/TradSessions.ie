@@ -6,18 +6,18 @@
 
 ## Frontend
 
-<img src="readme_images/TradSessions.ie - Home.jpg" width="250">
+<img src="Readme/TradSessions.ie - Home.jpg" width="250">
 
 ## Backend
 
 ### Infrastructure
 
-![](readme_images/TradSessions.ie%20-%20Infrastructure.png)
+![](Readme/TradSessions.ie%20-%20Infrastructure.png)
 
 ### Management
 
-![](readme_images/TradSessions.ie%20-%20Management.png)
+![](Readme/TradSessions.ie%20-%20Management.png)
 
 ### Deployment
 
-![](readme_images/TradSessions.ie%20-%20Deployment.png)
+![](Readme/TradSessions.ie%20-%20Deployment.png)
