@@ -6,10 +6,7 @@
 
 ## Frontend
 
-<img src="Readme/TradSessions.ie - Home.jpg" width="250">
-<img src="Readme/TradSessions.ie - Create.jpg" width="250">
-<img src="Readme/TradSessions.ie - Login.jpg" width="250">
-<img src="Readme/TradSessions.ie - Profile.jpg" width="250">
+<img src="Readme/TradSessions.ie - Home.jpg" width="250"><img src="Readme/TradSessions.ie - Login.jpg" width="250"><img src="Readme/TradSessions.ie - Profile.jpg" width="250"><img src="Readme/TradSessions.ie - Create.jpg" width="250">
 
 ## Backend
 
