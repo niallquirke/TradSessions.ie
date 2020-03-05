@@ -8,15 +8,26 @@
       :event="event"
       :rank="index + 1 + (page - 1) * 10"
     />
-    <nuxt-link v-show="page != 1" :to="{ path: '/', query: { page: page - 1 } }"
-      >Prev Page</nuxt-link
-    >
-    <template v-if="page != 1 && !events.last_page">|</template>
-    <nuxt-link
-      v-show="!events.last_page"
-      :to="{ path: '/', query: { page: page + 1 } }"
-      >Next Page</nuxt-link
-    >
+    <div class="link-wrapper">
+      <nuxt-link
+        v-show="page != 1"
+        :to="{ path: '/', query: { page: page - 1 } }"
+        >Prev Page</nuxt-link
+      >
+      <template v-if="page != 1 && !events.last_page">|</template>
+      <nuxt-link
+        v-show="!events.last_page"
+        :to="{ path: '/', query: { page: page + 1 } }"
+        >Next Page</nuxt-link
+      >
+      <template v-if="!events.last_page">|</template>
+      <a
+        href="https://niallquirke.com/contact.html"
+        target="_blank"
+        class="contact"
+        >Contact</a
+      >
+    </div>
   </div>
 </template>
 
@@ -62,7 +73,8 @@ export default {
     } catch (e) {
       error({
         statusCode: 503,
-        message: 'Unable to fetch events at this time. Please try again later.'
+        message:
+          'Unable to fetch sessions at this time. Please try again later.'
       })
     }
   },
@@ -75,10 +87,20 @@ export default {
         error({
           statusCode: 503,
           message:
-            'Unable to fetch events at this time, please try again later.'
+            'Unable to fetch sessions at this time, please try again later.'
         })
       }
     }
   }
 }
 </script>
+
+<style scoped>
+.contact {
+  position: absolute;
+  right: 0px;
+}
+.linkwrapper {
+  width: 100%;
+}
+</style>

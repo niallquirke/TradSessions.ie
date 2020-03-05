@@ -13,10 +13,8 @@ export const mutations = {
     state.idToken = response.idToken.jwtToken
     state.user = response.idToken.payload
     state.user.username = state.user['cognito:username']
-    localStorage.setItem('TradSessionsUser', JSON.stringify(response))
   },
   CLEAR_USER() {
-    localStorage.removeItem('TradSessionsUser')
     location.reload()
   },
   SET_USER_EVENTS(state, userEvents) {

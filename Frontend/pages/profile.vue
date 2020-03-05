@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <H1>{{ capatilizedUsername }}'s Events</H1>
+    <H1>{{ capatilizedUsername }}'s Sessions</H1>
     <p v-show="events.events.length == 0">
       You haven't created any sessions yet.
     </p>
@@ -62,7 +62,8 @@ export default {
     } catch (e) {
       error({
         statusCode: 503,
-        message: 'Unable to fetch events at this time. Please try again later.'
+        message:
+          'Unable to fetch sessions at this time. Please try again later.'
       })
     }
   },
@@ -75,7 +76,7 @@ export default {
         error({
           statusCode: 503,
           message:
-            'Unable to fetch events at this time. Please try again later.'
+            'Unable to fetch sessions at this time. Please try again later.'
         })
       }
     },

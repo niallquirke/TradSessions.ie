@@ -18,12 +18,13 @@ import { mapState } from 'vuex'
 export default {
   head() {
     return {
-      title: 'Event ' + this.event.title,
+      title: this.event.title,
       meta: [
         {
           hid: 'description',
           name: 'description',
-          content: 'What you need to know about Event ' + this.event.title
+          content:
+            'What you need to know about this session ' + this.event.title
         }
       ]
     }
@@ -37,7 +38,7 @@ export default {
     } catch (e) {
       error({
         statusCode: 503,
-        message: 'Unable to fetch event #' + route.query.id
+        message: 'Unable to fetch session #' + route.query.id
       })
     }
   }

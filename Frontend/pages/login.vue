@@ -4,7 +4,7 @@
       <div class="login">
         <h2 style="display:inline-block">So who's this now?</h2>
         <p v-show="directedFromCreate">
-          You must be logged in to create events
+          You must be logged in to create a session
         </p>
         <input v-model="isLogin" class="toggle" type="checkbox" />
         <form @submit.prevent="signupLogin">
