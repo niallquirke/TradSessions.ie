@@ -1,6 +1,6 @@
 # TradSessions.ie
 
-**Non-tech: A platform to find, share and review Irish traditional music sessions.**
+**Non-tech: A platform for finding, sharing and reviewing Irish traditional music sessions.**
 
 **Tech: A completely serverless, infrastructure-as-code, web application with enterprise standard infrastructure, management and deployment capable of scaling to millions of users and hundreds of developers while maintaining exceptional cost effectiveness and security.**
 
