@@ -43,6 +43,6 @@ The frontend is a mobile-first single page application built using Vue.js. It us
     * It is first sent to AWS CodeBuild to be compiled and checked for any errors.
     * It's then sent to AWS CodeDeploy which creates a CloudFormation Change Set and deploys the code and infrastructure changes to the Test environment
     * After the code as been tested in the Test environment I can then hit Approve in CodePipline and it will release the package to Prod.
-* The Pipeline is itself deployed through CloudFormation aswell so changes can be done in a strutured, consistent way and it is easily replicated.
+* The Pipeline is itself deployed through CloudFormation aswell so changes can be done in a structured, consistent way and it is easily replicated.
 
 Drawing kudos to the amazing https://cloudcraft.co
