@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <H1>So what's the craic with the trad sessions?</H1>
+    <H1>{{ phrase }}</H1>
     <EventCard
       v-for="(event, index) in events.events"
       :key="index"
@@ -8,7 +8,7 @@
       :event="event"
       :rank="index + 1 + (page - 1) * 10"
     />
-    <div class="link-wrapper">
+    <div>
       <nuxt-link
         v-show="page != 1"
         :to="{ path: '/', query: { page: page - 1 } }"
@@ -21,12 +21,7 @@
         >Next Page</nuxt-link
       >
       <template v-if="!events.last_page">|</template>
-      <a
-        href="https://niallquirke.com/contact.html"
-        target="_blank"
-        class="contact"
-        >Contact</a
-      >
+      <a href="https://niallquirke.com/contact.html" target="_blank">Contact</a>
     </div>
   </div>
 </template>
@@ -52,9 +47,31 @@ export default {
   components: {
     EventCard
   },
+  data() {
+    return {
+      phrases: [
+        "So what's the craic with the trad sessions?",
+        'Are ye still at the music?',
+        "C'mere 'til I tell ye",
+        'Stay quiet!',
+        "Hack a'you",
+        'Christ on a bike!',
+        'Shsssh!',
+        'Sure look it',
+        'Sure listen',
+        'tis what it tis now yanno yourself now',
+        'Great drying out this weather',
+        'Mon the town',
+        'Yup outta that'
+      ]
+    }
+  },
   computed: {
     page() {
       return parseInt(this.$route.query.page) || 1
+    },
+    phrase() {
+      return this.phrases[Math.floor(Math.random() * this.phrases.length)]
     },
     ...mapState({
       events: (state) => state.events.events
@@ -94,13 +111,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.contact {
-  position: absolute;
-  right: 0px;
-}
-.linkwrapper {
-  width: 100%;
-}
-</style>
