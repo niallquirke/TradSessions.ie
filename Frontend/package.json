@@ -14,7 +14,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
     "amazon-cognito-identity-js": "^3.2.2",
-    "aws-sdk": "^2.613.0",
+    "aws-sdk": "^2.814.0",
     "nuxt": "^2.0.0",
     "vuelidate": "^0.7.5"
   },
